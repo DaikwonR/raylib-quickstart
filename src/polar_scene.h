@@ -4,11 +4,11 @@
 #include "scene_camera.h"
 #include <string>
 
-class Scene
+class PolarScene
 {
 public:
-	Scene(const std::string& title, int width, int height, const Color& background = BLACK);
-	virtual ~Scene();
+	PolarScene(const std::string& title, int width, int height, const Color& background = BLACK);
+	virtual ~PolarScene();
 
 	virtual void Initialize() = 0;
 	virtual void Update() = 0;
