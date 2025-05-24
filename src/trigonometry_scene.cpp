@@ -5,6 +5,24 @@ void TrigonometryScene::Initialize()
 	m_camera = new SceneCamera(Vector2{ static_cast<float>(m_width) / 2, m_height / 2.0f });
 }
 
+void TrigonometryScene::Update()
+{
+}
+
+void TrigonometryScene::FixedUpdate()
+{
+}
+
+float DegToRad(float degree)
+{
+	return degree * (PI / 100);
+}
+
+float RadToDeg(float radius)
+{
+	return radius * (180 / PI);
+}
+
 float Vector2Length(const Vector2& v)
 {
 	return sqrtf((v.x * v.x) + (v.y * v.y));
@@ -14,12 +32,10 @@ Vector2 Vector2Normalize(const Vector2& v)
 {
 	float l = Vector2Length(v);
 	if (l == 0) return Vector2{ 0, 0 };
-	return Vector2{v.x / l, v.y / l};
+	return Vector2{ v.x / l, v.y / l };
 }
 
-void TrigonometryScene::Update()
-{
-}
+
 
 void TrigonometryScene::Draw()
 {
@@ -38,7 +54,8 @@ void TrigonometryScene::Draw()
 		float theta = (i / (float)steps) * (2 * PI);
 		float x = cosf(theta) * radius;
 		float y = sinf(theta) * radius;
-		DrawCircle(Vector2{x, y}, 0.25f, RED);
+
+		DrawCircle(Vector2{ x, y }, 0.25f, RED);
 	}
 
 	for (float x = -9.0f; x < 9; x += 0.2f)
@@ -51,10 +68,13 @@ void TrigonometryScene::Draw()
 		DrawCircle(Vector2{ x, s }, 0.25f, BLUE);
 	}
 
-	float theta;
+	float theta = time;
+	float x = cosf(theta) * radius;
+	float y = sinf(theta) * radius;
 
-	/*DrawGrid(10, 5, WHITE);
-	DrawCircleV(m_camera->WorldToScreen(Vector2{ 0, 0 }), m_camera->WorldToScreen(1), RED);*/
+	DrawCircle(Vector2{ x, y }, 0.25f, YELLOW);
+
+	float angle = atan2f(y, x);
 
 	m_camera->EndMode();
 }

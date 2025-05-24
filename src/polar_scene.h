@@ -2,21 +2,23 @@
 
 #include "raylib.h"
 #include "scene_camera.h"
+#include "scene.h"
 #include <string>
 
-class PolarScene
+class PolarScene : public Scene
 {
 public:
-	PolarScene(const std::string& title, int width, int height, const Color& background = BLACK);
-	virtual ~PolarScene();
+	PolarScene(const std::string& title, int width, int height, const Color& background = BLACK) :
+		Scene(title, width, height, background)
+	{
 
-	virtual void Initialize() = 0;
-	virtual void Update() = 0;
+	}
 
-	virtual void BeginDraw();
-	virtual void EndDraw();
-	virtual void Draw() = 0;
-	virtual void DrawGUI() = 0;
+	void Initialize() override;
+	void Update() override;
+	void FixedUpdate() override;
+	void Draw() override;
+	void DrawGUI() override;
 
 	bool IsQuit() { return WindowShouldClose(); }
 
@@ -24,17 +26,4 @@ public:
 	SceneCamera* GetCamera() { return m_camera; }
 
 	friend struct Body;
-
-protected:
-	void DrawGrid(float slices, float thickness, const Color& color) const;
-	void DrawText(const std::string& text, const Vector2& world, int fontSize, Color& color) const;
-	void DrawCircle(const Vector2& world, float radius, Color& color) const;
-	void DrawLine(const Vector2& v1, const Vector2& v2, float thickness, Color& color) const;
-
-protected:
-	int m_width{ 0 };
-	int m_height{ 0 };
-	Color m_background{ WHITE };
-
-	SceneCamera* m_camera{ nullptr };
 };

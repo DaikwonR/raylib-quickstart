@@ -1,53 +1,103 @@
 #include "polar.h"
 #include "polar_scene.h"
 
-void PolarScene::DrawGrid(float slices, float thickness, const Color& color) const
-{
-	const float maxRadius = 300.0f;
-	const Vector2 center = { GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f };
+#define LOGARITHMICSHAPE
 
-	for (float r = 50.0f; r <= maxRadius; r += 50.0f)
+//PolarScene::PolarScene(const std::string& title, int width, int height, const Color& background)
+//{
+//
+//}
+
+
+
+void PolarScene::Initialize()
+{
+	m_camera = new SceneCamera(Vector2{ static_cast<float>(m_width) / 2, static_cast<float>(m_height) / 2 });
+}
+
+void PolarScene::Update()
+{
+}
+
+void PolarScene::FixedUpdate()
+{
+
+}
+
+void PolarScene::Draw()
+{
+	m_camera->BeginMode();
+
+	DrawGrid(10, 5, DARKGRAY);
+
+#ifdef ARCHIMEDEAN
+	int steps = 200;
+	float time = (float)GetTime();
+	float a = 0;
+	float b = 0.35f;
+	for (int i = 0; i < steps; i++)
 	{
-		DrawCircle(center, r, color);
+		float theta = (i / (float)steps) * (8.0f * PI);
+		float r = a + (b * theta);
+		Polar p(time + theta, r);
+		DrawCircle(p, 0.01f, BLUE);
+	}
+#elif defined CARDIOID
+	int steps = 360;
+        float time = (float)GetTime() * 0.1f;
+        float a = 2.0f;
+
+		for (int i = 0; i < steps; i++)
+		{
+			float theta = (i / (float)steps) * (2.0f * PI);
+			float r = a * (1 + cosf(theta));
+			Polar p(time + theta, r);
+			DrawCircle(p, 0.01f, BLUE);
+		}
+
+#elif defined LIMACON
+	int steps = 360;
+	float time = (float)GetTime() * 0.1f;
+	float a = 2.0f;
+	float b = 1.0f;
+
+	for (int i = 0; i < steps; i++)
+	{
+		float theta = (i / (float)steps) * (2.0f * PI);
+		float r = a + (b * cosf(theta));
+		Polar p(time + theta, r);
+		DrawCircle(p, 0.01f, BLUE);
+	}
+#elif defined ROSE
+	int steps = 360;
+	float time = (float)GetTime() * 0.1f;
+	float a = 2.0f;
+	float k = 2.0f;
+
+	for (int i = 0; i < steps; i++)
+	{
+		float theta = (i / (float)steps) * (4.0f * PI);
+		float r = a * cosf(k * theta);
+		Polar p(time + theta, r);
+		DrawCircle(p, 0.01f, RED);
+	}
+#elif defined LOGARITHMICSHAPE
+	int steps = 360;
+	float time = (float)GetTime() * 0.1f;
+	float a = 2.0f;
+	float b = 1.0f;
+	for (int i = 0; i < steps; i++)
+	{
+		float theta = (i / (float)steps) * (2.0f * PI);
+		float r = a * expf(b * theta);
+		Polar p(time + theta, r);
+		DrawCircle(p, 0.01f, RED);
 	}
 
-	for (int i = 0; i < slices; i++)
-	{
-		float angle = (i * 2.0f * PI) / slices;
-		Polar p(angle, maxRadius);
-		Vector2 end = p;
-		end.x += center.x;
-		end.y += center.y;
-		DrawLine(center, end, thickness, color);
-	}
+#endif // ARCHIMEDEAN
+	m_camera->EndMode();
 }
 
-void PolarScene::DrawText(const std::string& text, const Vector2& world, int fontSize, Color& color) const
+void PolarScene::DrawGUI()
 {
-}
-
-void PolarScene::DrawCircle(const Vector2& world, float radius, Color& color) const
-{
-}
-
-void PolarScene::DrawLine(const Vector2& v1, const Vector2& v2, float thickness, Color& color) const
-{
-}
-
-PolarScene::PolarScene(const std::string& title, int width, int height, const Color& background)
-{
-}
-
-PolarScene::~PolarScene()
-{
-}
-
-void PolarScene::BeginDraw()
-{
-}
-
-void PolarScene::EndDraw()
-{
-	DrawGrid(12, 2.0f, GRAY);
-	
 }

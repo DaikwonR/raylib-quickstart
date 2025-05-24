@@ -1,38 +1,73 @@
 #include "world.h"
 #include "body.h"
+#include "gravitation.h"
+
 
 world::~world()
 {
+
 }
 
 void world::Initialize(Vector2 gravity, int poolSize)
 {
-	m_gravity = gravity;
+	world::gravity = gravity;
 	m_bodies.reserve(poolSize);
 }
 
 Body* world::CreateBody(const Vector2& position, float size, const Color& color)
 {
-	Body* body = new Body( position, size, color );
+	Body* body = new Body(position, size, color);
 	m_bodies.push_back(body);
 
-    return body;
+	return body;
+}
+
+Body* world::CreateBody(Body::Type type, const Vector2& position, float mass, float size, const Color& color)
+{
+	Body* body = new Body(type, position, mass, size, color);
+	m_bodies.push_back(body);
+
+	return body;
 }
 
 void world::Step(float timeStep)
 {
-	for (auto body : m_bodies) 
+	if (!simulate) return;
+
+	if (gravitation > 0)
+	{
+		ApplyGravitation(m_bodies, gravitation);
+	}
+
+	for (auto body : m_bodies)
 	{
 		body->Step(timeStep);
+		body->ClearForce();
+	}
+	for (auto spring : m_springs)
+	{
+		spring->ApplyForce(0.8f, springStiffnessMultiplier);
 	}
 }
 
-void world::Draw(const Scene& scene)
+void world::Draw(const Scene& scene) 
 {
 	for (auto body : m_bodies)
 	{
 		body->Draw(scene);
-	}	
+	}
+	for (auto spring : m_springs)
+	{
+		spring->Draw(scene);
+	}
+}
+
+Spring* world::CreateSpring(Body* bodyA, Body* bodyB, float restLength, float stiffness)
+{
+	Spring* spring = new Spring(bodyA, bodyB, restLength, stiffness);
+	m_springs.push_back(spring);
+
+	return spring;
 }
 
 void world::DestoryAll()
@@ -41,5 +76,10 @@ void world::DestoryAll()
 	{
 		delete body;
 	}
+	for (auto spring : m_springs)
+	{
+		delete spring;
+	}
 	m_bodies.clear();
+	m_springs.clear();
 }

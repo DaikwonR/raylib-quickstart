@@ -1,5 +1,6 @@
 #pragma once
-#include <raymath.h>
+#include "raylib.h"
+#include "raymath.h"
 
 struct Polar
 {
@@ -11,11 +12,11 @@ public:
 	{
 	}
 
-	Polar(const Vector2& v) :
+	Polar(Vector2 v) :
 		// !!get angle from Vector2 !!
-		angle{ angle },
+		angle{ atan2f(v.y, v.x) },
 		// !!get vector length !!
-		radius{ radius }
+		radius{ Vector2Length(v) }
 	{
 	}
 
@@ -24,7 +25,7 @@ public:
 		// !!get angle from Vector2 !!
 		angle = atan2f(v.y, v.x);
 		// !!get vector length !!
-		radius = Vector2Length(v);
+		radius = { Vector2Length(v) };
 
 		return *this;
 	}
