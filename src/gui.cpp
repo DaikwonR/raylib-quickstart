@@ -1,6 +1,7 @@
+#include "gui.h"
+
 #define RAYGUI_IMPLEMENTATION
 #include "raygui.h"
-#include "gui.h"
 
 #define GUI_DATA(data) TextFormat("%0.2f", data), &data
 

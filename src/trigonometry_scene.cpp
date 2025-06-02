@@ -23,10 +23,10 @@ float RadToDeg(float radius)
 	return radius * (180 / PI);
 }
 
-float Vector2Length(const Vector2& v)
-{
-	return sqrtf((v.x * v.x) + (v.y * v.y));
-}
+//float Vector2Length(const Vector2& v)
+//{
+//	return sqrtf((v.x * v.x) + (v.y * v.y));
+//}
 
 Vector2 Vector2Normalize(const Vector2& v)
 {

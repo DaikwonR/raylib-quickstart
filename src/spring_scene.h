@@ -1,7 +1,6 @@
 #pragma once
 
 #include "scene.h"
-#include "raygui.h"
 
 struct Body;
 
@@ -23,5 +22,4 @@ public:
 private:
 	Body* m_selectedBody { nullptr };
 	Body* m_connectBody { nullptr };
-	
 };

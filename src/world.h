@@ -1,10 +1,9 @@
 #pragma once
-
 #include "body.h"
 #include "spring.h"
-#include "raylib.h"
 #include "contact.h"
 
+#include "raylib.h"
 #include <vector>
 
 class Scene;
@@ -31,7 +30,7 @@ public:
 
 	Spring* CreateSpring(struct Body* bodyA, struct Body* bodyB, float restLength, float stiffness, float damping);
 
-	inline static Vector2 gravity{ 0, -9.81 };
+	inline static Vector2 gravity{ 0, -9.81f };
 
 	inline static float gravitation = 0;
 	inline static float springStiffnessMultiplier = 1;

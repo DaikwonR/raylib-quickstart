@@ -1,7 +1,7 @@
 #pragma once
 
-#include <scene.h>
 #include "raylib.h"
+#include "aabb.h"
 
 struct Body
 {
@@ -47,11 +47,12 @@ public:
 	}
 
 	void Step(float dt);
-	void Draw(const Scene& scene);
+	void Draw(const class Scene& scene);
 
 	void ApplyForce(const Vector2& force, ForceMode forceMode = ForceMode::Force);
 	void ClearForce() { force = Vector2{ 0, 0 }; }
 
+	aabb GetAABB() const { return aabb{ position, { size * 2, size * 2 } }; }
 
 public:
 

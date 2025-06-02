@@ -1,4 +1,6 @@
 #include "scene.h"
+#include "scene_camera.h"
+#include "world.h"
 #include <rlgl.h>
 
 Scene::Scene(const std::string& title, int width, int height, const Color& background) :
@@ -12,6 +14,43 @@ Scene::Scene(const std::string& title, int width, int height, const Color& backg
 Scene::~Scene()
 {
 	CloseWindow();
+}
+
+void Scene::Update()
+{
+	aabb worldAABB = m_camera->GetAABB();
+
+
+	for (auto body : m_world->GetBodies())
+	{
+		aabb aabb = body->GetAABB();		
+
+		if ((aabb.min().y) < worldAABB.min().y)
+		{
+			float overlap = (worldAABB.min().y - aabb.min().y); // calculate how far the body has penetrated beyond the world boundary
+			body->position.y += 2 * overlap; // move the body back inside the world bounds
+			body->velocity.y *= -body->restitution; // multiple by -restituion to scale and flip velocity
+		}
+		else if ((aabb.max().y) > worldAABB.max().y)
+		{
+			float overlap = (worldAABB.max().y - aabb.max().y);  // calculate how far the body has penetrated beyond the world boundary
+			body->position.y += 2 * overlap; // move the body back inside the world bounds
+			body->velocity.y *= -body->restitution; // multiple by -restituion to scale and flip velocity
+		}
+
+        if ((aabb.min().x) < worldAABB.min().x)
+        {
+			float overlap = (worldAABB.min().x - aabb.min().x);
+			body->position.x += 2 * overlap;
+			body->velocity.x *= -body->restitution;
+        }
+        else if (aabb.max().x > worldAABB.max().x)
+        {
+			float overlap = (worldAABB.max().x - aabb.max().x);
+			body->position.x += 2 * overlap;
+			body->velocity.x *= -body->restitution;
+        }
+	}
 }
 
 void Scene::BeginDraw()
