@@ -2,7 +2,7 @@
 #include "body.h"
 #include "raymath.h"
 
-void Spring::ApplyForce(float damping, float kMultiplier)
+void Spring::ApplyForce(float kMultiplier)
 {
 	Vector2 direction = bodyA->position - bodyB->position;
 	float lengthSqr = Vector2LengthSqr(direction);
@@ -29,7 +29,7 @@ void Spring::ApplyForce(float damping, float kMultiplier)
 	 
 }
 
-void Spring::ApplyForce(const Vector2& position, Body& body, float restLength, float k, float damping)
+void Spring::ApplyForce(const Vector2& position, Body& body, float restLength, float k)
 {
 	// direction = position <---- boydB
 	Vector2 direction = position - body.position;
@@ -44,11 +44,7 @@ void Spring::ApplyForce(const Vector2& position, Body& body, float restLength, f
 	Vector2 ndirection = direction / length;
 	Vector2 force = ndirection * forceMagnitude;
 
-	// damp spring force to prevent oscillation
-	float dampFactor = Vector2DotProduct(body.velocity, ndirection) * damping;
-	Vector2 dampingForce = ndirection * dampFactor;
-
-	body.ApplyForce(force);
+	body.ApplyForce(Vector2Negate(force));
 
 }
 

@@ -1,7 +1,8 @@
 #include "world.h"
 #include "body.h"
 #include "gravitation.h"
-
+#include "gui.h"
+#include "collision.h"
 
 world::~world()
 {
@@ -46,8 +47,12 @@ void world::Step(float timeStep)
 	}
 	for (auto spring : m_springs)
 	{
-		spring->ApplyForce(0.8f, springStiffnessMultiplier);
+		spring->ApplyForce(springStiffnessMultiplier);
 	}
+
+	m_contacts.clear();
+	CreateContacts(m_bodies, m_contacts);
+	SeperateContacts(m_contacts);
 }
 
 void world::Draw(const Scene& scene) 
@@ -62,9 +67,9 @@ void world::Draw(const Scene& scene)
 	}
 }
 
-Spring* world::CreateSpring(Body* bodyA, Body* bodyB, float restLength, float stiffness)
+Spring* world::CreateSpring(Body* bodyA, Body* bodyB, float restLength, float stiffness, float damping)
 {
-	Spring* spring = new Spring(bodyA, bodyB, restLength, stiffness);
+	Spring* spring = new Spring(bodyA, bodyB, restLength, stiffness, damping);
 	m_springs.push_back(spring);
 
 	return spring;

@@ -27,16 +27,18 @@ void SpringScene::Update()
 
 	if (!GUI::mouseOverGUI)
 	{
-		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) || IsMouseButtonDown(MOUSE_BUTTON_LEFT) && IsKeyDown(KEY_LEFT_CONTROL))
 		{
 			Vector2 position = m_camera->ScreenToWorld(GetMousePosition());
 			Body::Type type = (Body::Type)GUI::bodyTypeActive;
 
-			Body* body = m_world->CreateBody(position, GUI::sizeValue, ColorFromHSV(randomf(360), 1, 1));
+			Body* body = m_world->CreateBody(type, position, GUI::massValue, GUI::sizeValue, ColorFromHSV(randomf(360), 1, 1));
 
 			body->restitution = GUI::restitutionValue;
 			body->gravityScale = GUI::gravityScaleValue;
+			body->damping = GUI::dampingValue;
 
+			body->ApplyForce(randomOnUnitCircle() * 10, Body::ForceMode::Velocity);
 		}	
 
 		if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))
@@ -48,18 +50,27 @@ void SpringScene::Update()
 
 		if (m_selectedBody)
 		{
-			if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
+			if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT) && IsKeyDown(KEY_LEFT_CONTROL))
+			{
+				if (m_selectedBody->type == Body::Type::Dynamic)
+				{
+					Vector2 position = m_camera->ScreenToWorld(GetMousePosition());
+
+					Spring::ApplyForce(position, *m_selectedBody, 0.2f, 15.0f);
+				}
+			}
+			else if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
 			{
 				Vector2 position = m_camera->ScreenToWorld(GetMousePosition());
 
-				m_selectedBody = GUI::GetBodyIntersect(position, m_world->GetBodies(), *m_camera);
+				m_connectBody = GUI::GetBodyIntersect(position, m_world->GetBodies(), *m_camera);
 			}
 			else
 			{
 				if (m_selectedBody && m_connectBody)
 				{
 					float distance = Vector2Distance(m_selectedBody->position, m_connectBody->position);
-					m_world->CreateSpring(m_selectedBody, m_connectBody, distance, 20);
+					m_world->CreateSpring(m_selectedBody, m_connectBody, distance, GUI::stiffnessValue, GUI::springDampingValue);
 				}
 				m_selectedBody = nullptr;
 				m_connectBody = nullptr;
@@ -68,7 +79,7 @@ void SpringScene::Update()
 	}
 
 	// apply forces
-	m_world->Step(dt);
+	//m_world->Step(dt);
 
 	// apply collision
 	for (auto body : m_world->GetBodies())

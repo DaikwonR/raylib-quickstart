@@ -3,12 +3,15 @@
 #include "body.h"
 #include "spring.h"
 #include "raylib.h"
+#include "contact.h"
+
 #include <vector>
 
 class Scene;
 
 using bodies_t = std::vector<Body*>;
 using springs_t = std::vector<Spring*>;
+using contacts_t = std::vector<Contact*>;
 
 class world
 {
@@ -26,7 +29,7 @@ public:
 	void Step(float timeStep);
 	void Draw(const Scene& scene);
 
-	Spring* CreateSpring(struct Body* bodyA, struct Body* bodyB, float restLength, float stiffness);
+	Spring* CreateSpring(struct Body* bodyA, struct Body* bodyB, float restLength, float stiffness, float damping);
 
 	inline static Vector2 gravity{ 0, -9.81 };
 
@@ -37,5 +40,6 @@ public:
 private:
 	bodies_t m_bodies;
 	springs_t m_springs;
+	contacts_t m_contacts;
 
 };
