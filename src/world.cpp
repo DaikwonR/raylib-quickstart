@@ -53,6 +53,7 @@ void world::Step(float timeStep)
 	m_contacts.clear();
 	CreateContacts(m_bodies, m_contacts);
 	SeperateContacts(m_contacts);
+	ResolveContacts(m_contacts);
 }
 
 void world::Draw(const Scene& scene) 
