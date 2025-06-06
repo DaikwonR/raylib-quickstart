@@ -1,111 +1,107 @@
-# Raylib-Quickstart
-A simple cross platform template for setting up a project with the bleeding edge raylib code.
-Works with C or C++.
+🧪 C++ Physics Simulator
+A C++ physics simulator featuring a real-time GUI built with raygui. The simulator supports dynamic, kinematic, and static bodies, spring systems, and configurable physics parameters via an intuitive interface.
 
-## Supported Platforms
-Quickstart supports the main 3 desktop platforms:
-* Windows
-* Linux
-* MacOS
+🚀 Features
+🔷 Core Simulation
+Physical Body Types:
 
-# Naming projects
-Do not name your game project 'raylib', it will conflict with the raylib library.
+Static – Fixed in space; not affected by forces or collisions.
 
-# VSCode Users (all platforms)
-*Note* You must have a compiler toolchain installed in addition to vscode.
+Kinematic – Moves with predefined velocity; ignores external forces.
 
-* Download the quickstart
-* Rename the folder to your game name
-* Open the folder in VSCode
-* Run the build task ( CTRL+SHIFT+B or F5 )
-* You are good to go
+Dynamic – Fully simulated with force, gravity, and collision response.
 
-# Windows Users
-There are two compiler toolchains available for windows, MinGW-W64 (a free compiler using GCC), and Microsoft Visual Studio
-## Using MinGW-W64
-* Double click the `build-MinGW-W64.bat` file
-* CD into the folder in your terminal
-* run `make`
-* You are good to go
+Per-Object Configurations:
 
-### Note on MinGW-64 versions
-Make sure you have a modern version of MinGW-W64 (not mingw).
-The best place to get it is from the W64devkit from
-https://github.com/skeeto/w64devkit/releases
-or the version installed with the raylib installer
-#### If you have installed raylib from the installer
-Make sure you have added the path
+Mass
 
-`C:\raylib\w64devkit\bin`
+Size
 
-To your path environment variable so that the compiler that came with raylib can be found.
+Damping
 
-DO NOT INSTALL ANOTHER MinGW-W64 from another source such as msys2, you don't need it.
+Gravity Scale
 
-## Microsoft Visual Studio
-* Run `build-VisualStudio2022.bat`
-* double click the `.sln` file that is generated
-* develop your game
-* you are good to go
+Restitution (Bounciness)
 
-# Linux Users
-* CD into the build folder
-* run `./premake5 gmake2`
-* CD back to the root
-* run `make`
-* you are good to go
+Spring System:
 
-# MacOS Users
-* CD into the build folder
-* run `./premake5.osx gmake2`
-* CD back to the root
-* run `make`
-* you are good to go
+Connect objects via springs.
 
-# Output files
-The built code will be in the bin dir
+Spring parameters:
 
-# Working directories and the resources folder
-The example uses a utility function from `path_utils.h` that will find the resources dir and set it as the current working directory. This is very useful when starting out. If you wish to manage your own working directory you can simply remove the call to the function and the header.
+Stiffness (spring constant)
 
-# Changing to C++
-Simply rename `src/main.c` to `src/main.cpp` and re-run the steps above and do a clean build.
+Damping
 
-# Using your own code
-Simply remove `src/main.c` and replace it with your code, and re-run the steps above and do a clean build.
+🎛 GUI Controls (via raygui)
+Object Management:
 
-# Building for other OpenGL targets
-If you need to build for a different OpenGL version than the default (OpenGL 3.3) you can specify an OpenGL version in your premake command line. Just modify the bat file or add the following to your command line
+Add new objects of each type.
 
-## For OpenGL 1.1
-`--graphics=opengl11`
+Modify individual object parameters.
 
-## For OpenGL 2.1
-`--graphics=opengl21`
+Spring Management:
 
-## For OpenGL 4.3
-`--graphics=opengl43`
+Create spring connections between selected objects.
 
-## For OpenGLES 2.0
-`--graphics=opengles2`
+Simulation Settings:
 
-## For OpenGLES 3.0
-`--graphics=opengles3`
+Adjust global parameters:
 
-# License
-Copyright (c) 2020-2025 Jeffery Myers
+Global Gravity
 
-This software is provided "as-is", without any express or implied warranty. In no event 
-will the authors be held liable for any damages arising from the use of this software.
+Gravitational Force
 
-Permission is granted to anyone to use this software for any purpose, including commercial 
-applications, and to alter it and redistribute it freely, subject to the following restrictions:
+Spring Stiffness Multiplier
 
-  1. The origin of this software must not be misrepresented; you must not claim that you 
-  wrote the original software. If you use this software in a product, an acknowledgment 
-  in the product documentation would be appreciated but is not required.
+Simulation Control:
 
-  2. Altered source versions must be plainly marked as such, and must not be misrepresented
-  as being the original software.
+Start / Stop simulation
 
-  3. This notice may not be removed or altered from any source distribution.
+Reset simulation (clears all state)
+
+🧠 Physics Behavior
+Accurate force-based motion and interactions.
+
+Spring dynamics are computed using physics-based constraints.
+
+Simulation state is maintained when paused, and fully reset when needed.
+
+🛠 Build Instructions
+Prerequisites
+C++17 or later
+
+raylib
+
+raygui
+
+Build (example using g++ on Linux)
+bash
+Copy
+Edit
+g++ -o physics_sim main.cpp -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
+Make sure raylib and raygui are installed and linked correctly.
+
+📁 Project Structure
+css
+Copy
+Edit
+.
+├── src/
+│   ├── main.cpp
+│   ├── physics_engine.cpp
+│   └── gui_manager.cpp
+├── assets/
+├── include/
+│   ├── raygui.h
+│   └── physics_engine.h
+└── README.md
+📌 Future Plans / TODO
+Collision resolution improvements
+
+Save/load scenes
+
+Visual debugging (e.g., force vectors, collision normals)
+
+📄 License
+This project is open-source under the MIT License.
